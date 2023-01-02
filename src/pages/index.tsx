@@ -1,30 +1,28 @@
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
-import { trpc } from "~/utils/trpc";
-import { appInfo } from "../constants/app";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { PageHead } from "~/components/common";
 
 const Home: NextPage = () => {
-  const { data: sessionData } = useSession();
-  const { data: secretMsg } = trpc.auth.getSecretMessage.useQuery(undefined, {
-    enabled: !!sessionData?.user?.id,
-  });
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
 
   return (
     <>
-      <Head>
-        <title>{appInfo.name}</title>
-        <meta name="description" content={appInfo.description} />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <PageHead />
       <main>
-        <p>{appInfo.name}</p>
-        <p>
-          <span className="text-blue-500">{secretMsg}</span>
-        </p>
-        <button onClick={sessionData ? () => signOut() : () => signIn()}>
-          {sessionData ? "Sign out" : "Sign in"}
-        </button>
+        <h1>Get your links out there in seconds.</h1>
+        <Link
+          href={isAuthenticated ? "/create" : "/auth/signin"}
+          className="btn-primary btn"
+        >
+          {isAuthenticated ? "Create links" : "Get started"}
+        </Link>
+        {isAuthenticated && (
+          <button className="btn" onClick={() => signOut()}>
+            logout
+          </button>
+        )}
       </main>
     </>
   );
