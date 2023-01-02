@@ -8,6 +8,16 @@ datasource db {
   relationMode = "prisma"
 }
 
+model Link {
+  id     String @id @default(cuid())
+  title  String
+  href   String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 // Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
@@ -42,10 +52,13 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
+  username      String?   @unique
   emailVerified DateTime?
   image         String?
+  coverImage    String?
   accounts      Account[]
   sessions      Session[]
+  Link          Link[]
 }
 
 model VerificationToken {
