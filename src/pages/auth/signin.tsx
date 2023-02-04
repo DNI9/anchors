@@ -17,9 +17,9 @@ export default function SignIn({ providers }: Props) {
             <div key={provider.name}>
               <button
                 className="btn-primary btn"
-                onClick={() => signIn(provider.id)}
+                onClick={() => signIn(provider.id, { callbackUrl: "/setup" })}
               >
-                Sign in with {provider.name}
+                Get started with {provider.name}
               </button>
             </div>
           ))}

@@ -9,11 +9,12 @@ datasource db {
 }
 
 model Link {
-  id     String @id @default(cuid())
-  title  String
-  href   String
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id      String  @id @default(cuid())
+  title   String
+  href    String
+  private Boolean @default(false)
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
